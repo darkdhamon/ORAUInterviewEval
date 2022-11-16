@@ -1,0 +1,103 @@
+﻿@using ORAUInterviewEval.Core.Interfaces
+@using ORAUInterviewEval.Infrastructure.ViewModels
+
+
+@inject ICacheService cacheService
+
+@{
+	ViewData["Title"] = "Task 4 - Debug Javascript";
+
+
+	var programOptions = new SelectList(cacheService.GetPrograms(), "Key", "Value");
+}
+
+
+<div class="container">
+
+
+	<div class="row">
+		<div class="col-lg-8 offset-lg-2 mb-5">
+			<h1 class="border-bottom">@ViewData["Title"]</h1>
+			<div class="card">
+				<div class="card-body">
+					<h2>Requirements</h2>
+					<p>
+						When using the delete button on new items they dont delete as expected!
+					</p>
+					<ul>
+						<li>Figure out the problem(s) preventing the delete button from removing items added to the list</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-lg-8 offset-lg-2">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="float-end"><button class="btn btn-primary" id='add-item-btn'>Add Item</button></div>
+					<br />
+					<hr />
+
+
+
+					<div id="item-group-target">
+						
+					</div>
+
+
+					<hr />
+					<p></p>
+					<div class="row">
+						<div class="col-md-5">
+							<button class="btn-primary btn btn btn-block disabled" disabled=disabled>Save (not used in this task)</button>
+						</div>							
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="item-template" class="visually-hidden">
+		<div class="alert alert-default my-item">
+			Example Item
+			<div class="float-end text-nowrap">
+				<button type="button" class="btn btn-sm btn-danger delete-item-btn">delete</button>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+@section Scripts {
+
+	<script type="text/javascript">
+
+
+		function addItem(){
+			$('#item-template .my-item').clone().attr('data-uid', Date.now()).insertAfter('#item-group-target');			
+		}
+
+
+		$(document).ready(function(){
+			addItem();
+
+			$('#add-item-btn').click(function(){
+				addItem();
+			});
+
+			$('.delete-item-btn').click(function(){
+				var uid = $(this).parent().parent().attr('data-uid');
+				$('#item-group-target div[data-uid=' + uid + ']').remove();
+			});
+				
+
+		});
+	</script>
+}
