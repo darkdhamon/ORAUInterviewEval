@@ -77,11 +77,12 @@
 </div>
 @section Scripts {
 
-	<script type="text/javascript">
+    <script type="text/javascript">
 
 
 		function addItem(){
-			$('#item-template .my-item').clone().attr('data-uid', Date.now()).insertAfter('#item-group-target');			
+			$('#item-group-target').append($('#item-template .my-item').clone().attr('data-uid', Date.now()));
+			
 		}
 
 
@@ -92,11 +93,19 @@
 				addItem();
 			});
 
-			$('.delete-item-btn').click(function(){
-				var uid = $(this).parent().parent().attr('data-uid');
-				$('#item-group-target div[data-uid=' + uid + ']').remove();
+			$('#item-group-target').click(function (event) {
+				var target = $(event.target)
+				if (target.hasClass("delete-item-btn")){
+					var uid = target.parent().parent().attr('data-uid');
+				    /**
+				     * The following selector did not work before because the Div was not a child of item-group-target
+				     * I updated the logic to append to instead of insert after.
+				     * In addition the logic for AddItem did not add the event listener to new items added by when the user
+				     * clicks the add button so the event listener has been also been updated.
+				     */
+				    $('#item-group-target div[data-uid=' + uid + ']').remove();
+				}
 			});
-				
 
 		});
 	</script>
