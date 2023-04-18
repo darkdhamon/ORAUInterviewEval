@@ -43,15 +43,6 @@
 							</tr>
 						</thead>
 						<tbody>
-
-							@foreach (var item in Model.Users)
-							{
-							<tr>
-								<td>@item.FirstName @item.LastName</td>
-								<td>@item.Email</td>
-							</tr>	
-							}
-							
 						</tbody>
 					</table>
 
@@ -65,12 +56,26 @@
 
 </div>
 @section Scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 
-	<script type="text/javascript">
+    <script type="text/javascript">
 
 		$(document).ready(function(){
-			$('#user-table').DataTable();
+			$('#user-table').DataTable({
+				processing:true,
+				search: {
+					return: true,
+				},
+				serverSide:true,
+				ajax:{
+					url: '@Url.Action("Task6", "BusinessApi")',
+					type: 'post'
+				},
+				columns: [
+					{ data: 'name' },
+					{ data: 'email' },					
+				]
+			});
 		});
 
 	</script>

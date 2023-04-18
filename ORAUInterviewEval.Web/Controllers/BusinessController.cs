@@ -111,9 +111,7 @@ namespace ORAUInterviewEval.Web.Controllers
 
         public IActionResult Task6()
         {
-            var model = new Task6ViewModel();
-            model.Users = _taskService.GetUsers();
-            return View(model);
+            return View();
         }
 
 
