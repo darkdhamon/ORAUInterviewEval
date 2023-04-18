@@ -17,5 +17,10 @@ namespace ORAUInterviewEval.Infrastructure.ViewModels
         [Required]
         [DisplayName("Last Name")]
         public string LastName { get; set; }
+
+        [Required]
+        [DisplayName("Email")]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
     }
 }
