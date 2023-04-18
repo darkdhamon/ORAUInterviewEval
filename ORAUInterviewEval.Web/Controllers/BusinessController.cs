@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ORAUInterviewEval.Core.Interfaces;
 using ORAUInterviewEval.Infrastructure.ViewModels;
+using ORAUInterviewEval.Web.Extensions;
 
 namespace ORAUInterviewEval.Web.Controllers
 {
@@ -49,7 +50,12 @@ namespace ORAUInterviewEval.Web.Controllers
         [HttpPost]
         public IActionResult Task2(Task2ViewModel model)
         {
-            return View();
+			if (model.ProgramId == 99 && model.Other.IsNullOrWhiteSpace())
+			{
+				ModelState.AddModelError("Other", "This field is required when 'Other Program' is selected.");
+			}
+			if (!ModelState.IsValid) return View(model);
+			return View();
         }
 
 

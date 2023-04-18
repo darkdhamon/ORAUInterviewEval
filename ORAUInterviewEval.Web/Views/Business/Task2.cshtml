@@ -38,12 +38,17 @@
 			<div class="card">
 				<div class="card-body">
 					<form asp-action="Task2" asp-controller="Business" method="post">
-						<div class="form-group">
-							<label asp-for="ProgramId" class="form-label"></label>
-							<select asp-for="ProgramId" asp-items="programOptions" class="form-control"  aria-required="true" ></select>
-							<span asp-validation-for="ProgramId" class="text-danger"></span>
-						</div>
-						<div id="otherFormGroup" class="form-group" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="ProgramId" class="form-label"></label>
+                            <select asp-for="ProgramId" asp-items="programOptions" class="form-control"  aria-required="true" ></select>
+                            <span asp-validation-for="ProgramId" class="text-danger"></span>
+                        </div>
+                        @* 
+							I could add a style="display:none;" to the tag to have it hidden by default
+							But in case the user has JavaScript turned off in their browser they still 
+							need to see the field.
+						*@
+						<div id="otherFormGroup" class="form-group">
 							<label asp-for="Other" class="form-label"></label>
 							<input asp-for="Other" class="form-control"  aria-required="true" />
 							<span asp-validation-for="Other" class="text-danger"></span>
@@ -66,10 +71,26 @@
     <partial name="_ValidationScriptsPartial"/>
 
     <script type="text/javascript">
-		$("#@Html.IdFor(m => m.ProgramId)").change(
-			function(){
-				$("#otherFormGroup").show();
-				}
-		)
-	</script>
+
+		var programSelect = $("#@Html.IdFor(m => m.ProgramId)");
+		var otherFormGroup = $("#otherFormGroup")
+		var otherInput = $("#@Html.IdFor(m=>m.Other)");
+
+		function UpdateOtherFieldVisibility() {
+			var selectedValue = programSelect.val();
+			if (selectedValue == '99') {
+				otherFormGroup.show();
+				otherInput.prop('required', true);
+			} else {
+				otherFormGroup.hide();
+				otherInput.prop('required', false);
+			}
+			
+		}
+		//On Change event
+		programSelect.change(UpdateOtherFieldVisibility);
+
+		$(document).ready(UpdateOtherFieldVisibility);
+    
+    </script>
 }
