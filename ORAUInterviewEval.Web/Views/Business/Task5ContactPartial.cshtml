@@ -1,8 +1,11 @@
 ﻿@using ORAUInterviewEval.Core.Interfaces
-@model ProfileModel
+@model ContactModel
 @{
-	Guid newGuid = Guid.NewGuid();
-	Func<string, string> GenerateInputName = (x) => { return "Contacts[" + newGuid.ToString() + "]." + x; };
+	Func<string, string> GenerateInputName = (x) => { return "Profile.Contacts[" + ViewBag.Index+ "]." + x; };
+	/*
+	 * Guid was not working on my machine. So now using a int index instead. I could not find a way to get the guid to work view research online.
+	 * Need to use a combination of JS and ViewBag to get this to work.
+	 */
 }
 
 
@@ -11,17 +14,15 @@
 		Contact
 	</div>
 	<div class="card-body">
-
-		<input type="hidden" name="Contacts.Index" value="@newGuid" />
-
 		<div class="form-group">
 			<label class="form-label" for="@GenerateInputName("Address")">Address</label>
-			<input class="form-control" aria-required="true" name="@GenerateInputName("Address")" />
+            <input class="form-control" aria-required="true" name="@GenerateInputName("Address")" value="@Html.ValueFor(m=>m.Address)"/>
+			
 		</div>
 
 		<div class="form-group">
 			<label class="form-label" for="@GenerateInputName("City")">City</label>
-			<input class="form-control" aria-required="true" name="@GenerateInputName("City")" />
+			<input class="form-control" aria-required="true" name="@GenerateInputName("City")" value="@Html.ValueFor(m=>m.City)"/>
 		</div>
 
 

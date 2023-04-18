@@ -93,16 +93,16 @@ namespace ORAUInterviewEval.Web.Controllers
         [HttpPost]
         public IActionResult Task5(Task5ViewModel model)
         {
-            if(ModelState.IsValid)
-            {
-                _taskService.SaveProfile(model.Profile);
-            }
+	        if (!ModelState.IsValid) return View(model);
+            
+	        _taskService.SaveProfile(model.Profile);
             return View();
         }
 
         [HttpPost]
-        public IActionResult Task5NewContactPartial()
+        public IActionResult Task5NewContactPartial(int lastContactIndex)
         {
+            ViewBag.Index = lastContactIndex;
             return PartialView("Task5ContactPartial");
         }
 

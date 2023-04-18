@@ -8,7 +8,7 @@
 @{
 	ViewData["Title"] = "Task 5 - Debug the problem(s)";
 
-
+    ViewBag.Index = 0;
 	var programOptions = new SelectList(cacheService.GetPrograms(), "Key", "Value");
 }
 
@@ -39,19 +39,27 @@
 		<div class="col-lg-8 offset-lg-2">
 			<div class="card">
 				<div class="card-body">
-					<form action="@Url.Action("Business", "Task4")" method="post">
+					<form action="@Url.Action("Task5", "Business")" method="post">
 
 						<div class="form-group">
-							<label for="Profile.FullName" class="form-label">Full Name</label>
-							<input name="Profile.FullName" class="form-control" aria-required="true" />							
+							<label asp-for="Profile.FullName" class="form-label">Full Name</label>
+							<input asp-for="Profile.FullName" class="form-control" aria-required="true" />							
 						</div>
 
 
 						<h3>Contacts</h3>
 						<button type="button" id="add-contact-btn" class=" btn-primary btn">Add Contact</button>
 						<div id="contacts-target" class="mt-2">
-							
-						</div>
+                            @if (Model?.Profile?.Contacts != null)
+                            {
+								
+                                foreach (var contact in Model.Profile.Contacts)
+                                {
+                                    <partial name="Task5ContactPartial" model="contact"/>
+                                    ViewBag.Index++;
+                                }
+                            }
+                        </div>
 
 
 
@@ -72,15 +80,16 @@
 @section Scripts {
 	
 
-	<script type="text/javascript">
+    <script type="text/javascript">
 
-
+		var lastContactIndex = @ViewBag.Index;
 		$(document).ready(function(){
 
 			var CONTACT_PARTIAL_URL = '@Url.Action("Task5NewContactPartial")';
 			$('#add-contact-btn').click(function() {
-				$.post(CONTACT_PARTIAL_URL, {}, function(result) {					
+				$.post(CONTACT_PARTIAL_URL, {lastContactIndex}, function(result) {					
 					$('#contacts-target').append(result);
+					lastContactIndex++;
 				});
 			});
 
