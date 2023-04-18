@@ -46,6 +46,7 @@
 					<div class="form-group">
 						<label asp-for="Comment" class="form-label"></label>
                         <textarea asp-for="Comment" rows="6" class="form-control" aria-required="true" ></textarea>
+						<span class="text-muted"><span id="charCount">0</span>/100 characters</span> <br />
 						<span id="CommentValidation" class="text-danger"></span>
 					</div>
 
@@ -71,44 +72,48 @@
 		var charCountDisplay = $("#charCount");
 		var saveButton = $("#SaveCommentButton");
 		var commentValidation = $("#CommentValidation");
-
-		// Functions
 		
-		function SaveCommentCallBack(response) {
-			if (response.succeeded) {
+		// Functions
+		function setSaveEnable(){
+			var characterCount = commentInput.val().length
+			if(characterCount == 0){
+				saveButton.attr("disabled", true);
+			}else{
+				saveButton.attr("disabled", false);
+			}
+		}
+		
+		function SaveCommentCallBack(response){
+			if (response.succeeded){
 				alert(response.result);
 			}
-			if (response.status == 400) {
+			if (response.status==400){
 				commentValidation.text(response.responseJSON.errors["Comment"]);
 			}
 		}
-
-		function SaveComment() {
+		
+		function SaveComment(){
 			var requestBody = {
 				comment: commentInput.val()
 				//comment: null
 				//comment: "01234567891123456789212345678931234567894123456789512345678961234567897123456789812345678991234567890"
 			};
-
-			if (requestBody.comment.length == 0 || requestBody.comment.length >100) {
-				/**
-				 * Note: Because I added Max Length Annotation to the View Model on MS Edge and some other browsers
-				 * will not allow you to type more than 100 charaters so the upper bound of this error will not be hit.
-				 */
-				commentValidation.text("Comment is required and must be under 100 characters");
-			}
-			else{
-    			commentValidation.text("");
-	    		$.post({
-		    		url: "@Url.Action("Task3", "BusinessApi")",
-			    	data: JSON.stringify(requestBody),
-				    success: SaveCommentCallBack,
-				    contentType: 'application/json'
-			    }).fail(SaveCommentCallBack);
-			}
+			commentValidation.text("");
+			$.post({
+				url: "@Url.Action("Task3", "BusinessApi")",
+				data: JSON.stringify(requestBody),
+				success: SaveCommentCallBack,
+				contentType: 'application/json'
+			}).fail(SaveCommentCallBack);
 		}
-
+		
 		// Events
-		saveButton.click(SaveComment);
+		saveButton.click(SaveComment)
+		commentInput.keyup(function () {
+			var characterCount = commentInput.val().length
+			charCountDisplay.text(characterCount);
+			setSaveEnable();
+		});		
+		$(document).ready(setSaveEnable);
 	</script>
 }

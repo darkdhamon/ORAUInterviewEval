@@ -61,15 +61,22 @@ namespace ORAUInterviewEval.Web.Controllers
 
 
 
-        public IActionResult Task3()
-        {
-            return View();
-        }
+		public IActionResult Task3()
+		{
+			return View();
+		}
+
+        
+
+		public IActionResult Task3Better()
+		{
+			return View();
+		}
 
 
 
 
-        public IActionResult Task4()
+		public IActionResult Task4()
         {
             return View();
         }
