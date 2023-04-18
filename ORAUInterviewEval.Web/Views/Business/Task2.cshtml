@@ -43,7 +43,7 @@
 							<select asp-for="ProgramId" asp-items="programOptions" class="form-control"  aria-required="true" ></select>
 							<span asp-validation-for="ProgramId" class="text-danger"></span>
 						</div>
-						<div class="form-group">
+						<div id="otherFormGroup" class="form-group" style="display:none;">
 							<label asp-for="Other" class="form-label"></label>
 							<input asp-for="Other" class="form-control"  aria-required="true" />
 							<span asp-validation-for="Other" class="text-danger"></span>
@@ -63,9 +63,13 @@
 
 </div>
 @section Scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 
-	<script type="text/javascript">
-		
+    <script type="text/javascript">
+		$("#@Html.IdFor(m => m.ProgramId)").change(
+			function(){
+				$("#otherFormGroup").show();
+				}
+		)
 	</script>
 }
